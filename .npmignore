@@ -1,0 +1,21 @@
+# Development files
+src/
+tsconfig.json
+*.ts
+!*.d.ts
+
+# Documentation (keep README)
+DEMO.md
+
+# Dev dependencies
+node_modules/
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+*.test.js
+*.spec.js
