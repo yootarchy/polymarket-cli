@@ -6,6 +6,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D16.0.0-green)](https://nodejs.org/)
 
+![Polymarket CLI Demo](./screenshots/cli-demo.jpg)
+
 ## ✨ Features
 
 - 🎯 **Interactive TUI** - Stay-open terminal interface with keyboard navigation
