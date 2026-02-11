@@ -1,62 +1,35 @@
 # 🎲 Polymarket CLI
 
-> **Learn by example:** A production-ready TypeScript CLI demonstrating modern terminal UI patterns, intelligent caching strategies, and API integration you can study and adapt.
-
-Browse 5,000+ Polymarket prediction markets from your terminal with tag-based search, live odds tracking, and offline-capable local caching.
+> Interactive Terminal UI for browsing Polymarket prediction markets. Tag-based search, live odds, and offline caching for 5,000+ active events.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D16.0.0-green)](https://nodejs.org/)
 
----
+## ✨ Features
 
-## 🎓 Why This CLI Exists
-
-Building developer tools? This project shows you how.
-
-**What you'll learn:**
-- ✅ **Interactive TUI patterns** with Inquirer.js and state management
-- ✅ **Offline-first architecture** using local cache with smart invalidation
-- ✅ **Clean API client design** with proper error handling and rate limiting
-- ✅ **TypeScript project structure** that scales from prototype to production
-- ✅ **CLI UX best practices** - from one-shot commands to watch modes
-
-**Perfect for:**
-- DevRel engineers building reference implementations
-- Developers learning modern Node.js CLI architecture
-- Anyone who needs a production-ready TypeScript CLI starter
-
----
-
-## ✨ What It Does
-
-- 🎯 **Interactive Terminal UI** - Stay-open interface with keyboard navigation (not just fire-and-forget commands)
-- 🔍 **Tag-Based Event Search** - Find events by keyword using local cache (politics, crypto, sports, etc.)
+- 🎯 **Interactive TUI** - Stay-open terminal interface with keyboard navigation
+- 🔍 **Tag-Based Search** - Find events by tag/keyword using local cache
 - ⚡ **Offline Capable** - Search 5,000+ active events instantly without API calls
-- 🔄 **Smart Cache Management** - Auto-refresh with stale detection and manual refresh command
-- 📊 **Live Market Monitoring** - Real-time odds, volume, and trend indicators with auto-refresh
-- 🎨 **Beautiful Terminal Output** - Color-coded results with trend arrows and table formatting
+- 🔄 **Smart Caching** - Auto-refresh cache with latest events from Polymarket API
+- 📊 **Live Market Data** - Real-time odds, volume, and trending markets
+- 🎨 **Beautiful Output** - Color-coded results with trend indicators
 
----
+## 📦 Installation
 
-## 🚀 Quick Start
+### Global Install (Recommended)
 
-### Try it now (no install):
+```bash
+npm install -g @polymarket/cli
+```
+
+### Use with npx
 
 ```bash
 npx @polymarket/cli
 ```
 
-**Interactive mode starts immediately** - use arrow keys to navigate, search markets, and filter by trending/ending soon/long-term.
-
-### Install globally:
-
-```bash
-npm install -g @polymarket/cli
-poly
-```
-
-### Build from source (recommended for learning):
+### From Source
 
 ```bash
 git clone https://github.com/yootarchy/polymarket-cli.git
@@ -66,177 +39,243 @@ npm run build
 npm link
 ```
 
-**Then dive into the code** - all commands live in `src/commands/`, the interactive flow is in `src/interactive.ts`, and cache logic is in `src/cache.ts`.
+## 🚀 Quick Start
 
----
+### Interactive Mode (Default)
 
-## 🏗️ Architecture & Learning Resources
+Simply run `poly` with no arguments to start the interactive TUI:
 
-### How It's Built
+```bash
+poly
+```
 
-This CLI demonstrates **three key architectural patterns** you can reuse:
+**Interactive Flow:**
 
-#### 1. **Interactive TUI Flow** (`src/interactive.ts`)
-- State machine pattern for multi-step workflows
-- Clean prompt composition with Inquirer.js
-- Loop-based interface that doesn't exit after each action
+```
+╔══════════════════════════════════════════╗
+║   🎲 Polymarket CLI - Interactive Mode   ║
+╚══════════════════════════════════════════╝
 
-#### 2. **Offline-First Caching** (`src/cache.ts`)
-- Local JSON cache at `~/.polymarket-cli/events-cache.json`
-- Stale detection with 24-hour threshold
-- Smart refresh prompts and manual refresh command
-- Tag indexing for instant keyword search
+? Search markets: bitcoin
 
-#### 3. **Modular Command Structure** (`src/commands/`)
-- Each command is a standalone function
-- Shared formatters in `src/formatters.ts`
-- Unified API client in `src/api.ts` with retry logic
+✓ Found 8 markets matching "bitcoin"
+
+? Sort by: (Use arrow keys)
+❯ Trending (24hr volume)
+  Ending Soon (<7 days)
+  Long-Term (>30 days)
+  All Markets
+
+📊 Trending Bitcoin Markets:
+
+1. Will Bitcoin reach $150K in 2026?
+   YES: 52% ↑  NO: 48%
+   Volume: $2.4M  Ends: Dec 31, 2026
+   
+2. Bitcoin vs Ethereum 2026
+   YES: 68% ↑  NO: 32%
+   Volume: $892K  Ends: Dec 31, 2026
+
+? What next: (Use arrow keys)
+❯ New search
+  Change filter
+  Watch a market
+  Exit
+```
+
+**Key Controls:**
+- **Arrow Keys** - Navigate options
+- **Enter** - Select
+- **Ctrl+C** - Exit anytime
+
+### One-Shot Commands
+
+Perfect for scripting or quick lookups:
+
+#### Search Events (Local Cache)
+```bash
+# Search for events by tag/keyword
+poly search bitcoin
+poly search politics
+poly search crypto
+
+# First-time use auto-builds cache
+# Subsequent searches are instant!
+```
+
+**Example Output:**
+```
+Found 49 events matching tag "bitcoin":
+1. MicroStrategy sells any Bitcoin by ___ ? (4 active markets)
+2. When will Bitcoin hit $150k? (5 active markets)
+3. Will knots flip bitcoin core by ___? (2 active markets)
+...
+
+Cache last updated: 2/11/2026, 7:58:09 PM
+Run "poly refresh" to update cache with latest events.
+```
+
+#### Refresh Cache
+```bash
+# Update cache with latest events from API
+poly refresh
+```
+
+**Example Output:**
+```
+🔄 Refreshing events cache from Polymarket API...
+
+✓ Cache refreshed successfully!
+
+📊 Cache Statistics:
+  • 5,000 active events
+  • 39,845 total markets
+  • 976 unique tags
+```
+
+#### View Trending Markets
+```bash
+poly trending
+```
+
+**Output:**
+```
+🔥 Top Trending Markets (24hr Volume):
+
+1. US strikes Iran by February 10, 2026?
+   YES: 0.0%   NO: 100.0% ↑
+   Tags: Geopolitics, Politics, Middle East
+   Volume: $9.25M  Ends: Ended
+   
+2. Will Trump nominate Judy Shelton as the next Fed chair?
+   YES: 3.8%   NO: 96.3% ↑
+   Tags: Jerome Powell, Politics, Trump Presidency
+   Volume: $4.62M  Ends: Dec 31, 2026
+```
+
+#### View Ending Soon
+```bash
+poly ending
+```
+
+#### Watch a Market (Live Updates)
+```bash
+poly watch <condition-id>
+```
+
+## 📊 Command Reference
+
+| Command | Description | Speed | API Calls |
+|---------|-------------|-------|-----------|
+| `poly` | Interactive mode | Fast | Multiple |
+| `poly search <query>` | Search events (cache) | ⚡ Instant | 0 |
+| `poly refresh` | Update cache | Slow (~30s) | ~10 |
+| `poly trending` | Trending markets | Fast | Multiple |
+| `poly ending` | Ending soon | Fast | Multiple |
+| `poly watch <id>` | Live monitor | Live | Continuous |
+
+## 🎨 Interactive Mode Features
+
+### 1. Search & Filter Workflow
+
+```
+Search → Filter → View Results → Action
+                                   ↓
+                              Loop or Exit
+```
+
+**Filters Available:**
+- **Trending** - Highest 24hr trading volume
+- **Ending Soon** - Markets closing within 7 days
+- **Long-Term** - Markets ending in 30+ days
+- **All Markets** - Unfiltered results
+
+### 2. Actions Menu
+
+After viewing results, choose what to do next:
+
+- **New Search** - Start a fresh search
+- **Change Filter** - Apply different filter to current results
+- **Watch a Market** - Enter live monitoring mode
+- **Exit** - Close the app
+
+### 3. Live Watch Mode
+
+Monitor specific markets with automatic updates every 30 seconds:
+
+```bash
+📊 Polymarket Live Monitor
+
+Will Bitcoin reach $150K in 2026?
+
+YES: 52.3% ↑
+NO:  47.7% ↓
+
+24hr Volume: $2.4M
+Ends: Dec 31, 2026
+
+Updating every 30s... Press Ctrl+C to exit
+```
+
+## 🏗️ Architecture
 
 ### Project Structure
 
 ```
 polymarket-cli/
 ├── src/
-│   ├── index.ts           # Entry point & CLI router (Commander.js)
-│   ├── interactive.ts     # Interactive TUI loop (Inquirer.js)
-│   ├── api.ts            # Polymarket Gamma API client with error handling
-│   ├── cache.ts          # Local cache manager with stale detection
-│   ├── formatters.ts     # Terminal output helpers (Chalk + tables)
+│   ├── index.ts           # Entry point & command router
+│   ├── interactive.ts     # Interactive TUI mode
+│   ├── api.ts            # Polymarket API client
+│   ├── cache.ts          # Local cache manager
+│   ├── formatters.ts     # Display formatters
 │   └── commands/
-│       ├── search.ts     # Offline search against local cache
-│       ├── refresh.ts    # Fetch + rebuild cache from API
-│       ├── trending.ts   # Sort by 24hr volume
-│       ├── ending.ts     # Filter by end date (<7 days)
-│       └── watch.ts      # Live monitoring with setInterval
-├── dist/                  # Compiled JS (npm publishes this)
-├── package.json          # Bin entry: "poly" → dist/index.js
-└── tsconfig.json         # Target: ES2020, module: CommonJS
+│       ├── search.ts     # Search command (cache-based)
+│       ├── refresh.ts    # Cache refresh command
+│       ├── trending.ts   # Trending command
+│       ├── ending.ts     # Ending soon command
+│       └── watch.ts      # Watch mode command
+├── dist/                  # Compiled JavaScript
+├── screenshots/           # Example outputs
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-**Study these files if you're building:**
-- 📖 `src/interactive.ts` - Learn interactive prompt flows
-- 📖 `src/cache.ts` - Learn offline-first data management
-- 📖 `src/api.ts` - Learn API client patterns with Axios
-- 📖 `src/commands/watch.ts` - Learn real-time terminal updates
+### Cache System
 
-See **[CACHE-ARCHITECTURE.md](./CACHE-ARCHITECTURE.md)** for deep dive on the caching system.
+The CLI uses a **local cache system** for fast, offline-capable event discovery:
 
----
+- **Location:** `~/.polymarket-cli/events-cache.json`
+- **Size:** ~3.7 MB (5,000 events)
+- **Contains:** Active events + tags + market counts
+- **Benefits:** 
+  - ⚡ Instant search (no API calls)
+  - 🔌 Works offline after initial cache
+  - 🎯 Only active markets (no ended events)
+  - 🏷️ Tag-based discovery
 
-## 📋 Command Reference
+**Cache Workflow:**
 
-### Interactive Mode (Recommended for First-Time Users)
+1. **First Run** - Auto-builds cache from API (~30 seconds)
+2. **Search** - Instant tag/keyword lookups against local cache
+3. **Refresh** - Manual update with `poly refresh` command
+4. **Auto-Update** - Prompts when cache is >24 hours old
 
-```bash
-poly
-```
+See [CACHE-ARCHITECTURE.md](./CACHE-ARCHITECTURE.md) for detailed documentation.
 
-**Flow:**
-1. Enter search term (e.g. "bitcoin", "politics")
-2. Choose filter (trending / ending soon / long-term / all)
-3. View results with live odds
-4. Loop: new search, change filter, watch market, or exit
+### API Integration
 
-**Key controls:**
-- Arrow keys = navigate
-- Enter = select
-- Ctrl+C = exit
+Uses the official **Polymarket Gamma API**:
 
----
+- **Base URL:** `https://gamma-api.polymarket.com`
+- **Documentation:** [docs.polymarket.com](https://docs.polymarket.com)
+- **Endpoints Used:**
+  - `/events` - List active events
+  - `/markets` - Get market details
+  - `/markets/{id}` - Individual market data
 
-### One-Shot Commands (Perfect for Scripting)
-
-#### Search (Offline, Cache-Based)
-```bash
-poly search bitcoin
-poly search politics
-```
-- ⚡ **Instant** - no API calls, searches local cache
-- 🔌 **Offline capable** after first cache build
-- 📊 Returns: event titles, market counts, tags
-
-**First-time use:** Auto-builds cache (~30 seconds)
-**Subsequent searches:** <10ms
-
----
-
-#### Refresh Cache
-```bash
-poly refresh
-```
-- Fetches latest 5,000 active events from Polymarket API
-- Updates local cache with new tags and market data
-- Takes ~30 seconds, provides progress feedback
-- Recommended: run once per day
-
----
-
-#### Trending Markets
-```bash
-poly trending
-```
-- Fetches top markets by 24hr volume
-- Shows: odds, volume, end date, tags
-- Updates: live data from API (not cached)
-
----
-
-#### Ending Soon
-```bash
-poly ending
-```
-- Markets ending within 7 days
-- Sorted by end date (soonest first)
-
----
-
-#### Watch Mode (Live Monitoring)
-```bash
-poly watch <condition-id>
-```
-- Auto-refreshes every 30 seconds
-- Shows: live odds, volume, end date
-- Press Ctrl+C to exit
-
----
-
-## 📊 Performance Stats
-
-| Metric | Value | Notes |
-|--------|-------|-------|
-| **Search Speed** | <10ms | Cache-based, no network |
-| **Cache Refresh** | ~30s | Fetches 5,000 events |
-| **Cache Size** | 3.7 MB | JSON file in home directory |
-| **Memory Usage** | <50 MB | Lightweight, CLI-friendly |
-| **Startup Time** | <1s | Compiled TypeScript |
-
----
-
-## 🎯 Use Cases
-
-### 1. **Learning Modern CLI Development**
-- Study the code to understand TUI patterns
-- Reference the cache architecture for offline-first apps
-- Learn TypeScript project setup for Node.js CLIs
-
-### 2. **Building Developer Tools**
-- Use as a starter template for your own CLI
-- Adapt the cache system for other APIs
-- Learn from the UX patterns (interactive vs one-shot)
-
-### 3. **Terminal-Based Workflows**
-- Quick market research without opening browser
-- Scriptable commands for automation
-- Offline browsing with occasional cache refresh
-
-### 4. **Teaching & Documentation**
-- Show this to junior devs learning Node.js
-- Reference implementation for DevRel talks
-- Example of production-ready open-source code
-
----
-
-## 🛠️ Development Guide
+## 🛠️ Development
 
 ### Setup
 
@@ -246,124 +285,94 @@ cd polymarket-cli
 npm install
 ```
 
-### Build & Run
+### Build
 
 ```bash
-# Compile TypeScript
 npm run build
-
-# Run compiled version
-npm start
-
-# Development mode (tsx)
-npm run dev
-
-# Link locally for testing
-npm link
-poly
 ```
 
-### Demo Commands (No Build Required)
+### Development Mode
 
 ```bash
-npm run demo:search   # Tests search command
-npm run demo:trending # Tests trending command
+npm run dev           # Run with tsx (TypeScript)
+npm run demo:search   # Test search command
+npm run demo:trending # Test trending command
 ```
 
-### Tech Stack Choices
+### Tech Stack
 
-| Library | Why? | Alternative |
-|---------|------|-------------|
-| **TypeScript 5.7** | Type safety, modern syntax | Plain JavaScript |
-| **Inquirer.js** | Best-in-class interactive prompts | Prompts, Enquirer |
-| **Commander** | Standard CLI arg parsing | Yargs, Meow |
-| **Chalk** | Terminal colors, widely used | Kleur, Picocolors |
-| **Axios** | HTTP client with interceptors | node-fetch, got |
-| **Ora** | Spinners for loading states | CLI-Spinner |
+- **TypeScript 5.7** - Type-safe development
+- **Inquirer.js** - Interactive CLI prompts
+- **Chalk** - Terminal colors and styling
+- **Axios** - HTTP client for API calls
+- **Commander** - CLI argument parsing
+- **date-fns** - Date formatting
+- **Ora** - Loading spinners
 
-**Why these specific choices?**
-- Inquirer.js = battle-tested for complex TUI flows
-- Commander = minimal API, easy to learn
-- Chalk = most popular coloring library, good DX
-- Axios = built-in retry logic and interceptors
-- TypeScript = type safety prevents runtime errors in production
+## 🎯 Use Cases
 
----
+### For Traders
+- Quick market research via cache search
+- Monitor specific markets in real-time
+- Track trending predictions
+- Daily cache refresh for up-to-date events
+
+### For Developers
+- CLI scripting and automation
+- Fast offline lookups
+- Market data integration
+- Terminal-based workflows
+
+### For Enthusiasts
+- Explore prediction markets by tag
+- Stay informed on events
+- Fast lookups without browser
+- Offline-capable after initial setup
+
+## 📈 Performance
+
+- **Search:** <10ms (cache-based)
+- **Cache Refresh:** ~30 seconds (5,000 events)
+- **Cache Size:** ~3.7 MB
+- **Memory Usage:** <50 MB
+- **Startup Time:** <1 second
 
 ## 🤝 Contributing
 
-**Contributions welcome!** This is a learning-focused project - improvements to documentation, code clarity, and examples are especially valued.
-
-### How to Contribute
+Contributions welcome! Please:
 
 1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Make your changes (prioritize readability for learners)
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
 4. Add tests if applicable
-5. Update documentation if you change behavior
-6. Commit: `git commit -m 'Add your feature'`
-7. Push: `git push origin feature/your-feature`
-8. Open a Pull Request with:
-   - What you changed
-   - Why (especially if it improves the learning value)
-   - Screenshots/examples if relevant
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
-
----
-
-## 🧠 Learning Resources
-
-**Want to build your own CLI like this?**
-
-- 📖 [How to Build a Node.js CLI](https://nodejs.org/en/learn/command-line/cli-commands) - Official Node.js guide
-- 📖 [Inquirer.js Examples](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/inquirer/examples) - Interactive prompt patterns
-- 📖 [Commander.js Documentation](https://github.com/tj/commander.js#readme) - CLI argument parsing
-- 📖 [TypeScript Handbook](https://www.typescriptlang.org/docs/) - Type system fundamentals
-
-**Related projects to study:**
-- [npm CLI](https://github.com/npm/cli) - Production-scale CLI architecture
-- [GitHub CLI](https://github.com/cli/cli) - Go-based CLI with great UX
-- [Heroku CLI](https://github.com/heroku/cli) - Plugin-based architecture
-
----
 
 ## 📝 License
 
 MIT License - see [LICENSE](./LICENSE) for details.
 
-**TL;DR:** Do whatever you want with this code. Build on it, fork it, use it in commercial projects, adapt it for your own CLIs. No attribution required (but appreciated!).
-
----
-
 ## 🙏 Credits
 
-- **Data source:** [Polymarket](https://polymarket.com) - world's largest prediction market
-- **API:** [Polymarket Gamma API](https://docs.polymarket.com) - public, no auth required
-- **Inspiration:** The need for terminal-native developer tools and reference implementations
-- **Built by:** [@yootarchy](https://github.com/yootarchy) as a DevRel learning resource
-
----
+- Built with data from [Polymarket](https://polymarket.com) - the world's largest prediction market
+- Inspired by the need for terminal-native market research tools
+- Made with ❤️ by the [yootarchy](https://github.com/yootarchy) team
 
 ## ⚠️ Disclaimer
 
-**This is an unofficial tool** and is not affiliated with, endorsed by, or connected to Polymarket in any way.
+This is an **unofficial** tool and is not affiliated with, endorsed by, or connected to Polymarket in any way. Use at your own risk. Always verify market data on the official Polymarket website before making trading decisions.
 
-- Use at your own risk
-- Always verify market data on official Polymarket website before trading
-- This is a learning resource, not financial advice
-- API endpoints may change without notice
+## 📞 Support
 
----
-
-## 📞 Support & Contact
-
-- 🐛 **Issues:** [GitHub Issues](https://github.com/yootarchy/polymarket-cli/issues)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/yootarchy/polymarket-cli/discussions)
-- 🐦 **Twitter:** [@yootarchy](https://twitter.com/yootarchy)
+- **Issues:** [GitHub Issues](https://github.com/yootarchy/polymarket-cli/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/yootarchy/polymarket-cli/discussions)
+- **Twitter:** [@yootarchy](https://twitter.com/yootarchy)
 
 ---
 
-**⭐ Star this repo if you find it useful!**
+**Made with ❤️ for the prediction market community**
 
-*Made with ❤️ for developers learning by example*
+*Star ⭐ this repo if you find it useful!*
